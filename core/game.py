@@ -12,6 +12,11 @@ class Game:
         self.fps = 60
         self.scene = Scene()
         self.input_manager = InputManager()
+        self.debug_mode = False
+               
+        
+    def toggle_debug(self):
+        self.debug_mode = not self.debug_mode
 
     def run(self):
         self.running = True
@@ -20,12 +25,14 @@ class Game:
             for event in events:
                 if event.type == pg.QUIT:
                     self.running = False
+                if event.type == pg.KEYDOWN and event.key == pg.K_F1:
+                    self.toggle_debug()
             
             self.input_manager.update(events)
             self.scene.update(events)
             
             self.screen.fill((0, 0, 0))
-            self.scene.render(self.screen)
+            self.scene.render(self.screen, debug_mode=self.debug_mode)
             pg.display.flip()
             self.clock.tick(self.fps)
     

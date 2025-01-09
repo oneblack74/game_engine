@@ -48,7 +48,7 @@ class Scene:
             
         self.check_collision()
             
-    def render(self, surface):
+    def render(self, surface, debug_mode=False):
         if not self.camera:
             raise ValueError("No camera set for the scene")
 
@@ -62,3 +62,10 @@ class Scene:
                 transform = game_object.get_component("Transform")
                 screen_position = camera_component.world_to_screen(transform.position)
                 renderer.draw(surface, screen_position)
+                
+            if debug_mode:
+                collider = game_object.get_component("Collider")
+                if collider:
+                    bounds = collider.get_bounds()
+                    screen_position = camera_component.world_to_screen(bounds.topleft)
+                    collider.draw(surface, screen_position)

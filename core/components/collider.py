@@ -27,6 +27,15 @@ class Collider(Component):
         position = self.parent.transform.position
         return pg.Rect(position[0], position[1], self.width, self.height)
     
+    def draw(self, surface, position):
+        color = (255, 0, 0) if self.is_trigger else (0, 0, 255)
+        pg.draw.rect(
+            surface,
+            color,
+            pg.Rect(position[0], position[1], self.width, self.height),
+            1
+        )
+    
     def resolve_collision(self, other):
         """
         Calcule et applique la résolution de collision.

@@ -25,6 +25,11 @@ def main():
     static_object.add_component(Collider(1, 1))
     scene.add_game_object(static_object)
     
+    # Ajoute un objet déclencheur
+    trigger_object = GameObject("Trigger Object", x=200, y=200)
+    trigger_object.add_component(Collider(1, 1, is_trigger=True))
+    scene.add_game_object(trigger_object)
+    
     game.set_scene(scene)
     
     game.run()
