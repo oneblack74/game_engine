@@ -1,3 +1,5 @@
+import pygame as pg
+
 class InputAction:
     def __init__(self, name):
         self.name = name
@@ -9,15 +11,20 @@ class InputAction:
             self.keys.extend(key)
         else:
             self.keys.append(key)
+            
+    def add_key_binding(self, key):
+        self.bind_key(key)
 
     def update(self, events):
-        self.state = {"pressed": False, "held": False, "released": False}
+        #self.state = {"pressed": False, "held": False, "released": False}
         for event in events:
-            if event.type == pygame.KEYDOWN and event.key in self.keys:
+            if event.type == pg.KEYDOWN and event.key in self.keys:
                 self.state["pressed"] = True
+                self.state["released"] = False
                 self.state["held"] = True
-            elif event.type == pygame.KEYUP and event.key in self.keys:
+            elif event.type == pg.KEYUP and event.key in self.keys:
                 self.state["released"] = True
+                self.state["pressed"] = False
                 self.state["held"] = False
 
     def is_pressed(self):
@@ -28,3 +35,4 @@ class InputAction:
 
     def is_released(self):
         return self.state["released"]
+    

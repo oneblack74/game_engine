@@ -10,6 +10,8 @@ def main():
     player = GameObject("Player")
     player.add_component(Renderer(color=(0, 255, 0)))
     player.get_component("Transform").position = (400, 300)
+    player.add_component(Move(name="Move", speed=1, input_manager=game.input_manager))
+    
     scene.add_game_object(player)
 
     # Ajoute une caméra comme enfant du joueur

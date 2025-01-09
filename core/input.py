@@ -1,3 +1,5 @@
+from core.input_action import InputAction
+
 class InputManager:
     def __init__(self):
         self.actions = {}

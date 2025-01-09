@@ -1,4 +1,5 @@
 from core.scene import Scene
+from core.input import InputManager
 
 import pygame as pg
 
@@ -10,6 +11,7 @@ class Game:
         self.running = False
         self.fps = 60
         self.scene = Scene()
+        self.input_manager = InputManager()
 
     def run(self):
         self.running = True
@@ -19,7 +21,10 @@ class Game:
                 if event.type == pg.QUIT:
                     self.running = False
             
+            self.input_manager.update(events)
             self.scene.update(events)
+            
+            self.screen.fill((0, 0, 0))
             self.scene.render(self.screen)
             pg.display.flip()
             self.clock.tick(self.fps)
