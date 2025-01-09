@@ -1,7 +1,7 @@
 from core.components.transform import Transform
 
 class GameObject:
-    def __init__(self, name, description=""):
+    def __init__(self, name, x=0, y=0, description=""):
         self.name = name
         self.description = description
         self.components = {}
@@ -10,10 +10,14 @@ class GameObject:
         # Ajoute un composant Transform par défaut
         self.transform = Transform()
         self.transform.parent = self
+        self.transform.position = (x, y)
         self.add_component(self.transform)
 
     def __str__(self):
         return self.name
+    
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.name})"
     
     def add_component(self, component):
         component.parent = self
@@ -48,5 +52,15 @@ class GameObject:
             child.parent = None
             child.get_component("Transform").parent = None
             self.children.remove(child)
+            
+    def on_collision_enter(self, other):
+        """Appelé lorsqu'une collision est détectée."""
+        #print("f{self.name} collided with {other.name}")
+        pass
+    
+    def on_trigger_enter(self, other):
+        """Appelé lorsqu'une collision est détectée."""
+        #print("f{self.name} triggered with {other.name}")
+        pass
             
     

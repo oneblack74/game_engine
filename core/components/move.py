@@ -3,8 +3,8 @@ from core.component import *
 import pygame as pg
 
 class Move(Component):
-    def __init__(self,name, speed=1, input_manager=None):
-        super().__init__(name=name)
+    def __init__(self, speed=1, input_manager=None):
+        super().__init__(name="Move")
         self.speed = speed
         self.input_manager = input_manager
         
