@@ -32,6 +32,16 @@ def main():
     
     game.set_scene(scene)
     
+    # Créer un text
+    text = UIText((100, 100), "Hello World!", font_size=50, color=(0, 0, 255))
+    game.ui_manager.add_element(text)
+    
+    # Créer un bouton
+    button = UIButton((0, 0), (200, 50), text="Click me")
+    button.set_call_back(lambda: print("Button clicked"))
+    game.ui_manager.add_element(button)
+    
+    
     game.run()
     
     
