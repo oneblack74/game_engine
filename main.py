@@ -1,4 +1,5 @@
 from core import *
+import pygame as pg
 
 def main():
     game = Game()
@@ -8,9 +9,12 @@ def main():
 
     # Ajoute un joueur
     player = GameObject("Player", x=400, y=300)
-    player.add_component(Renderer(color=(0, 255, 0)))
+    #player.add_component(Renderer(player, color=(0, 255, 0)))
     player.add_component(Move(speed=1, input_manager=game.input_manager))
     player.add_component(Collider(1, 1))
+    
+    sprite = pg.image.load("assets/images/player/0.png")
+    player.add_component(SpriteRenderer(sprite, player, size=3))
     
     scene.add_game_object(player)
 
@@ -21,7 +25,7 @@ def main():
 
     # Ajoute un objet statique
     static_object = GameObject("Static Object", x=600, y=400)
-    static_object.add_component(Renderer(color=(255, 0, 0)))
+    static_object.add_component(Renderer(static_object, color=(255, 0, 0)))
     static_object.add_component(Collider(1, 1))
     scene.add_game_object(static_object)
     

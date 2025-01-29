@@ -59,9 +59,15 @@ class Scene:
         for game_object in self.game_objects:
             renderer = game_object.get_component("Renderer")
             if renderer:
-                transform = game_object.get_component("Transform")
+                transform = game_object.transform
                 screen_position = camera_component.world_to_screen(transform.position)
                 renderer.draw(surface, screen_position)
+                
+            sprite_renderer = game_object.get_component("SpriteRenderer")
+            if sprite_renderer:
+                transform = game_object.transform
+                screen_position = camera_component.world_to_screen(transform.position)
+                sprite_renderer.draw(surface, screen_position)
                 
             if debug_mode:
                 collider = game_object.get_component("Collider")
