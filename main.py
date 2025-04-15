@@ -1,5 +1,6 @@
 from core import *
 import pygame as pg
+from editor import *
 
 def main():
     game = Game()
@@ -50,4 +51,6 @@ def main():
     
     
 if __name__ == "__main__":
-    main()
+    #main()
+    editor_window = EditorWindow()
+    editor_window.mainloop()
