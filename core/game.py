@@ -3,13 +3,19 @@ from core.input import InputManager
 from core.ui import UIManager
 
 import pygame as pg
+import os
 
 class Game:
-    def __init__(self, title="Game", width=800, height=600):
+    def __init__(self, title="Game", width=800, height=600, is_editor=False):
         pg.init()
         pg.font.init()
-        
-        self.screen = pg.display.set_mode((width, height))
+
+        if is_editor:
+            os.environ["SDL_VIDEO_DRIVER"] = "dummy"
+            self.screen = pg.Surface((width, height))
+        else:
+            self.screen = pg.display.set_mode((width, height))
+            
         self.caption = pg.display.set_caption(title)
         self.clock = pg.time.Clock()
         self.running = False

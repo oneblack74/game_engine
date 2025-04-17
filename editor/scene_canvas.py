@@ -1,45 +1,33 @@
 import tkinter as tk
+import pygame as pg
+from PIL import Image, ImageTk
 
 class SceneCanvas(tk.Canvas):
-    def __init__(self, parent, width=800, height=600):
-        super().__init__(parent, width=width, height=height, bg="gray20")
+    def __init__(self, parent, pygame_game_instance, width=800, height=600):
+        super().__init__(parent, width=width, height=height, bg="black")
         self.pack(fill=tk.BOTH, expand=True)
 
-        self.scene = None
-        self.selected_object = None
+        self.game = pygame_game_instance  # instance de Game avec is_editor=True
+        self.tk_image = None
 
-        self.bind("<Button-1>", self.on_click)
-        self.after(16, self.update_canvas)  # 60 FPS
-
-    def set_scene(self, scene):
-        self.scene = scene
+        self.after(16, self.update_canvas)  # Boucle de rendu
 
     def update_canvas(self):
         self.delete("all")
 
-        if self.scene:
-            for obj in self.scene.game_objects:
-                transform = obj.get_component("Transform")
-                if transform:
-                    x, y = transform.position
-                    size = 30
+        # Appelle le moteur pour mettre à jour et dessiner la scène sur surface
+        if self.game.scene:
+            self.game.scene.update([])      # Pas d'events
+            self.game.scene.render(self.game.screen)  # Rend sur self.game.screen
 
-                    fill_color = "yellow" if obj == self.selected_object else "lightblue"
-                    self.create_rectangle(x, y, x + size, y + size, fill=fill_color)
-                    self.create_text(x + size // 2, y - 10, text=obj.name, fill="white")
+            self.tk_image = self.pygame_surface_to_tk_image(self.game.screen)
+            self.create_image(0, 0, anchor=tk.NW, image=self.tk_image)
 
         self.after(16, self.update_canvas)
 
-    def on_click(self, event):
-        if not self.scene:
-            return
-
-        for obj in self.scene.game_objects:
-            transform = obj.get_component("Transform")
-            if transform:
-                x, y = transform.position
-                size = 30
-                if x <= event.x <= x + size and y <= event.y <= y + size:
-                    self.selected_object = obj
-                    print(f"Sélectionné : {obj.name}")
-                    break
+    def pygame_surface_to_tk_image(self, surface):
+        """Convertit une surface Pygame en image Tkinter proprement"""
+        width, height = surface.get_size()
+        data = pg.image.tostring(surface, "RGB")  # ← Conversion fiable
+        image = Image.frombytes("RGB", (width, height), data)
+        return ImageTk.PhotoImage(image)
