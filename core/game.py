@@ -7,10 +7,12 @@ import os
 
 class Game:
     def __init__(self, title="Game", width=800, height=600, is_editor=False):
+        self.is_editor = is_editor
+        
         pg.init()
         pg.font.init()
 
-        if is_editor:
+        if self.is_editor:
             os.environ["SDL_VIDEO_DRIVER"] = "dummy"
             self.screen = pg.Surface((width, height))
         else:
@@ -30,6 +32,9 @@ class Game:
         self.debug_mode = not self.debug_mode
 
     def run(self):
+        if self.is_editor:
+            return
+
         self.running = True
         while self.running:
             
@@ -48,7 +53,7 @@ class Game:
             self.ui_manager.update(events)
             
             # Render
-            self.screen.fill((0, 0, 0))
+            self.screen.fill((50, 50, 50))
             if self.scene:
                 self.scene.render(self.screen, debug_mode=self.debug_mode)
             self.ui_manager.render(self.screen)
@@ -59,3 +64,9 @@ class Game:
     
     def set_scene(self, scene):
         self.scene = scene
+
+    def update_for_editor(self):
+        if self.scene:
+            self.screen.fill((50, 50, 50))
+            self.scene.update([])
+            self.scene.render(self.screen, debug_mode=True)

@@ -21,6 +21,7 @@ class EditorWindow(tk.Tk):
 
         player = core.GameObject("Player", x=100, y=100)
         player.add_component(core.Renderer(player, color=(0, 255, 0)))
+        player.add_component(core.Move(input_manager=self.game.input_manager))
         self.scene.add_game_object(player)
 
         cube = core.GameObject("Cube", x=200, y=150)

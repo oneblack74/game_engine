@@ -15,19 +15,26 @@ class SceneCanvas(tk.Canvas):
     def update_canvas(self):
         self.delete("all")
 
-        # Appelle le moteur pour mettre à jour et dessiner la scène sur surface
         if self.game.scene:
-            self.game.scene.update([])      # Pas d'events
-            self.game.scene.render(self.game.screen)  # Rend sur self.game.screen
+            self.game.update_for_editor()
 
-            self.tk_image = self.pygame_surface_to_tk_image(self.game.screen)
-            self.create_image(0, 0, anchor=tk.NW, image=self.tk_image)
+            surface = self.game.screen
+
+            game_width, game_height = surface.get_size()
+            canvas_width = self.winfo_width()
+            canvas_height = self.winfo_height()
+
+            scale = min(canvas_width / game_width, canvas_height / game_height)
+            new_width = int(game_width * scale)
+            new_height = int(game_height * scale)
+            offset_x = (canvas_width - new_width) // 2
+            offset_y = (canvas_height - new_height) // 2
+
+            pg_surface_rgb = pg.transform.scale(surface, (new_width, new_height))
+            data = pg.image.tostring(pg_surface_rgb, "RGB")
+            image = Image.frombytes("RGB", (new_width, new_height), data)
+
+            self.tk_image = ImageTk.PhotoImage(image)
+            self.create_image(offset_x, offset_y, anchor=tk.NW, image=self.tk_image)
 
         self.after(16, self.update_canvas)
-
-    def pygame_surface_to_tk_image(self, surface):
-        """Convertit une surface Pygame en image Tkinter proprement"""
-        width, height = surface.get_size()
-        data = pg.image.tostring(surface, "RGB")  # ← Conversion fiable
-        image = Image.frombytes("RGB", (width, height), data)
-        return ImageTk.PhotoImage(image)
